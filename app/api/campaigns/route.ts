@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseServer";
 import { buildUtmUrl, fetchPostId } from "@/lib/utm";
+import { getCurrentUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -22,6 +23,9 @@ type InLink = { url: string; weight: number; post_id?: string };
 // Com project_id: `url` de cada link é a URL BASE; o servidor busca o Post ID
 // e gera a URL final com UTM. Sem project_id: `url` é usada como está.
 export async function POST(req: NextRequest) {
+  const auth = await getCurrentUser();
+  if (!auth) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
+
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "JSON invalido" }, { status: 400 });
 
@@ -55,6 +59,16 @@ export async function POST(req: NextRequest) {
       { error: "Informe pelo menos 2 links de destino" },
       { status: 400 }
     );
+
+  // Operador só cria campanha dentro de um projeto liberado pra ele.
+  if (!auth.isAdmin) {
+    if (!projectId || !auth.allowedProjectIds.includes(projectId)) {
+      return NextResponse.json(
+        { error: "Escolha um projeto liberado para você." },
+        { status: 403 }
+      );
+    }
+  }
 
   // Se tiver projeto, carrega os metadados p/ montar as UTMs.
   let project: { abbr: string; language: string; country: string } | null = null;

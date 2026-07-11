@@ -1,7 +1,8 @@
 import { supabaseAdmin } from "@/lib/supabaseServer";
 import { getBaseUrl } from "@/lib/baseUrl";
+import { getCurrentUser } from "@/lib/auth";
 import CampaignActions from "./CampaignActions";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +15,21 @@ async function countClicks(campaignId: string, opts: { linkId?: string; bot?: bo
 }
 
 export default async function CampaignStats({ params }: { params: { id: string } }) {
+  const auth = await getCurrentUser();
+  if (!auth) redirect("/login");
+
   const { data: campaign } = await supabaseAdmin
     .from("campaigns")
-    .select("id, slug, name, filter_bots, facebook_pixel_id, active")
+    .select("id, slug, name, filter_bots, facebook_pixel_id, active, project_id")
     .eq("id", params.id)
     .single();
 
   if (!campaign) return notFound();
+
+  // Operador só abre campanhas dos projetos liberados pra ele.
+  if (!auth.isAdmin && !(campaign.project_id && auth.allowedProjectIds.includes(campaign.project_id))) {
+    redirect("/dashboard");
+  }
 
   const { data: links } = await supabaseAdmin
     .from("links")

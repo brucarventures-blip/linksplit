@@ -1,9 +1,15 @@
 import { supabaseAdmin } from "@/lib/supabaseServer";
+import { getCurrentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import ProjectsManager from "./ProjectsManager";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
+  const auth = await getCurrentUser();
+  if (!auth) redirect("/login");
+  if (!auth.isAdmin) redirect("/dashboard");
+
   const { data: projects } = await supabaseAdmin
     .from("projects")
     .select("id, code, name, domain, abbr, language, country, created_at")

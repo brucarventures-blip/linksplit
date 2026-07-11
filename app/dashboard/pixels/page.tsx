@@ -1,9 +1,15 @@
 import { supabaseAdmin } from "@/lib/supabaseServer";
+import { getCurrentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import PixelsManager from "./PixelsManager";
 
 export const dynamic = "force-dynamic";
 
 export default async function PixelsPage() {
+  const auth = await getCurrentUser();
+  if (!auth) redirect("/login");
+  if (!auth.isAdmin) redirect("/dashboard");
+
   const { data: pixels } = await supabaseAdmin
     .from("pixels")
     .select("id, name, pixel_id, description, created_at")

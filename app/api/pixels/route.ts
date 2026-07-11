@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseServer";
+import { getCurrentUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// GET /api/pixels  -> lista os pixels salvos
+// GET /api/pixels  -> lista os pixels salvos (qualquer usuário logado)
 export async function GET() {
+  const auth = await getCurrentUser();
+  if (!auth) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
   const { data, error } = await supabaseAdmin
     .from("pixels")
     .select("id, name, pixel_id, description, created_at")
@@ -14,8 +17,11 @@ export async function GET() {
   return NextResponse.json({ pixels: data ?? [] });
 }
 
-// POST /api/pixels  -> cria um pixel  { name, pixel_id, description }
+// POST /api/pixels  -> cria um pixel (só admin)
 export async function POST(req: NextRequest) {
+  const auth = await getCurrentUser();
+  if (!auth) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
+  if (!auth.isAdmin) return NextResponse.json({ error: "apenas admin cria pixels" }, { status: 403 });
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "JSON invalido" }, { status: 400 });
 
