@@ -1,0 +1,23 @@
+{
+  "name": "linksplit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rotador de links (traffic splitter) com distribuicao igual e filtro de bots.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --test tests/logic.test.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.0",
+    "@types/react": "18.3.3",
+    "typescript": "5.5.3"
+  }
+}
