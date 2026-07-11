@@ -1,12 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config";
+import { SUPABASE_URL, SUPABASE_ANON_KEY, cookieOptions } from "./config";
 
 // Cliente Supabase para Server Components / Route Handlers, com a sessão do
 // usuário lida dos cookies. Usa a chave ANON (respeita o usuário logado).
 export function createClient() {
   const cookieStore = cookies();
   return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    cookieOptions,
     cookies: {
       getAll() {
         return cookieStore.getAll();

@@ -1,12 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config";
+import { SUPABASE_URL, SUPABASE_ANON_KEY, cookieOptions } from "./config";
 
 // Atualiza a sessão a cada request e protege as rotas do painel.
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    cookieOptions,
     cookies: {
       getAll() {
         return request.cookies.getAll();
