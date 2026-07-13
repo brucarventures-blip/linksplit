@@ -9,7 +9,39 @@ type User = {
   email: string | null;
   role: "admin" | "operador";
   project_ids: string[];
+  avatar_url?: string | null;
 };
+
+const AV_COLORS = ["#3b82f6", "#0ea5e9", "#14b8a6", "#f59e0b", "#ef4444", "#ec4899", "#6366f1", "#22c55e"];
+function initials(s: string) {
+  const p = s.split(/[@._\-\s]+/).filter(Boolean);
+  return ((p[0]?.[0] || "") + (p[1]?.[0] || "")).toUpperCase() || "?";
+}
+function avColor(id: string) {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return AV_COLORS[h % AV_COLORS.length];
+}
+// Redimensiona/recorta pro padrão 256x256 e devolve dataURL JPEG (payload pequeno).
+function fileToSquareDataUrl(file: File, size = 256): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const side = Math.min(img.width, img.height);
+      const sx = (img.width - side) / 2;
+      const sy = (img.height - side) / 2;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("canvas"));
+      ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+      resolve(canvas.toDataURL("image/jpeg", 0.85));
+    };
+    img.onerror = () => reject(new Error("Falha ao ler a imagem"));
+    img.src = URL.createObjectURL(file);
+  });
+}
 
 export default function UsersManager({
   initialUsers,
@@ -28,6 +60,26 @@ export default function UsersManager({
   const [error, setError] = useState("");
   const [editing, setEditing] = useState<string | null>(null);
   const [editSel, setEditSel] = useState<string[]>([]);
+  const [uploading, setUploading] = useState<string | null>(null);
+
+  async function uploadAvatar(id: string, file: File) {
+    setUploading(id);
+    try {
+      const dataUrl = await fileToSquareDataUrl(file);
+      const res = await fetch(`/api/users/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ avatar: dataUrl }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error ?? "Falha ao enviar foto");
+      router.refresh();
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setUploading(null);
+    }
+  }
 
   const projName = (id: string) => {
     const p = projects.find((x) => x.id === id);
@@ -121,6 +173,7 @@ export default function UsersManager({
         <table>
           <thead>
             <tr>
+              <th>Foto</th>
               <th>Email</th>
               <th>Papel</th>
               <th>Projetos</th>
@@ -130,6 +183,40 @@ export default function UsersManager({
           <tbody>
             {initialUsers.map((u) => (
               <tr key={u.id}>
+                <td>
+                  <label
+                    title="Enviar/trocar foto"
+                    style={{ cursor: uploading === u.id ? "wait" : "pointer", display: "inline-block", position: "relative" }}
+                  >
+                    {u.avatar_url ? (
+                      <img
+                        src={u.avatar_url}
+                        alt=""
+                        style={{ width: 34, height: 34, borderRadius: "50%", objectFit: "cover", display: "block" }}
+                      />
+                    ) : (
+                      <span
+                        style={{
+                          width: 34, height: 34, borderRadius: "50%", display: "grid", placeItems: "center",
+                          background: avColor(u.id), color: "#fff", fontWeight: 700, fontSize: 13,
+                        }}
+                      >
+                        {initials(u.email || "?")}
+                      </span>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploading === u.id}
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) uploadAvatar(u.id, f);
+                        e.target.value = "";
+                      }}
+                      style={{ display: "none" }}
+                    />
+                  </label>
+                </td>
                 <td>{u.email}{u.id === meId ? " (você)" : ""}</td>
                 <td>
                   <span className="pill">{u.role}</span>

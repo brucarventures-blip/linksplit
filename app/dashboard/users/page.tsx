@@ -11,7 +11,7 @@ export default async function UsersPage() {
   if (!auth.isAdmin) redirect("/dashboard");
 
   const [{ data: profiles }, { data: links }, { data: projects }] = await Promise.all([
-    supabaseAdmin.from("profiles").select("id, email, role, created_at").order("created_at", { ascending: true }),
+    supabaseAdmin.from("profiles").select("id, email, role, created_at, avatar_url").order("created_at", { ascending: true }),
     supabaseAdmin.from("user_projects").select("user_id, project_id"),
     supabaseAdmin.from("projects").select("id, code, name").order("created_at", { ascending: false }),
   ]);
