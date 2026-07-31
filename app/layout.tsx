@@ -17,7 +17,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <header className="topbar">
           <a href={auth ? "/dashboard" : "/login"} className="brand">
-            🔀 LinkSplit
+            <span className="brand-mark" aria-hidden="true">B</span>
+            <span className="brand-copy">
+              <strong>LinkSplit</strong>
+              <small>ROTEAMENTO</small>
+            </span>
           </a>
           {auth && (
             <>
@@ -29,7 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </nav>
               <div className="topbar-actions">
                 <a className="panel-link" href="https://painel.brucarventures.com">
-                  Painel
+                  ← Painel
                 </a>
                 <Logout email={auth.profile?.email ?? auth.user.email} />
               </div>

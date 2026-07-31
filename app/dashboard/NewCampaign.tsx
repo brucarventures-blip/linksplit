@@ -99,22 +99,28 @@ export default function NewCampaign() {
   }
 
   return (
-    <div className="card">
-      <h2 style={{ marginTop: 0 }}>Nova campanha</h2>
+    <section className="card campaign-form">
+      <div className="form-heading">
+        <div>
+          <span className="eyebrow">NOVA CONFIGURAÇÃO</span>
+          <h2>Nova campanha</h2>
+        </div>
+        <span className="muted">Defina o destino e o LinkSplit cuida da rotação.</span>
+      </div>
 
-      <div className="row" style={{ gap: 12, alignItems: "flex-start" }}>
-        <div style={{ flex: 1 }}>
+      <div className="form-grid">
+        <div className="form-field">
           <label>Nome da campanha</label>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: GRSCBR - Vídeo 1" />
         </div>
-        <div style={{ flex: 1 }}>
+        <div className="form-field">
           <label>Slug do link (opcional)</label>
           <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="ex: grscbr (vira /grscbr)" />
         </div>
       </div>
 
-      <div className="row" style={{ gap: 12, alignItems: "flex-start", marginTop: 6 }}>
-        <div style={{ flex: 2 }}>
+      <div className="form-grid project-row">
+        <div className="form-field project-field">
           <label>Projeto (opcional — gera UTM automática)</label>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} style={selStyle}>
             <option value="">— Sem projeto (URLs diretas) —</option>
@@ -126,7 +132,7 @@ export default function NewCampaign() {
           </select>
         </div>
         {hasProject && (
-          <div style={{ flex: 1 }}>
+          <div className="form-field split-field">
             <label>Nº do split</label>
             <input
               type="number"
@@ -144,7 +150,7 @@ export default function NewCampaign() {
         </div>
       )}
 
-      <div className="row between" style={{ marginTop: 10 }}>
+      <div className="form-section-heading">
         <label>{hasProject ? "URLs base das páginas" : "Páginas de destino"}</label>
         <div className="row" style={{ gap: 6 }}>
           <input type="checkbox" id="cw" checked={customWeights} style={{ width: 18 }} onChange={(e) => setCustomWeights(e.target.checked)} />
@@ -170,14 +176,14 @@ export default function NewCampaign() {
           )}
         </div>
       ))}
-      <div className="row between" style={{ marginTop: 6 }}>
+      <div className="form-actions-row">
         <button className="secondary" type="button" onClick={addRow}>+ Adicionar página</button>
         {filledRows.length >= 2 && !customWeights && (
           <span className="pill">{filledRows.length} páginas · {Math.round(100 / filledRows.length)}% cada</span>
         )}
       </div>
 
-      <div style={{ marginTop: 14 }}>
+      <div className="form-section">
         <label>Pixel do Facebook (opcional — deixe vazio p/ split "SP")</label>
         {savedPixels.length > 0 && (
           <select value={pixel} onChange={(e) => setPixel(e.target.value)} style={selStyle}>
@@ -193,7 +199,7 @@ export default function NewCampaign() {
         </div>
       </div>
 
-      <div style={{ marginTop: 12 }} className="row">
+      <div className="toggle-row">
         <input type="checkbox" id="fb" checked={filterBots} style={{ width: 18 }} onChange={(e) => setFilterBots(e.target.checked)} />
         <label htmlFor="fb" style={{ margin: 0 }}>Filtrar bots/crawlers (recomendado — mantém a divisão exata)</label>
       </div>
@@ -206,9 +212,9 @@ export default function NewCampaign() {
       )}
 
       {error && <p className="err">{error}</p>}
-      <button onClick={submit} disabled={loading || !name.trim() || filledRows.length < 2} style={{ marginTop: 10 }}>
+      <button className="primary-action" onClick={submit} disabled={loading || !name.trim() || filledRows.length < 2}>
         {loading ? "Criando..." : "Criar campanha"}
       </button>
-    </div>
+    </section>
   );
 }
