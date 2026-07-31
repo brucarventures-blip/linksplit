@@ -27,7 +27,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 {auth.isAdmin && <a href="/dashboard/pixels">Pixels</a>}
                 {auth.isAdmin && <a href="/dashboard/users">Usuários</a>}
               </nav>
-              <div style={{ marginLeft: "auto" }}>
+              <div className="topbar-actions">
+                <a className="panel-link" href="https://painel.brucarventures.com">
+                  Painel
+                </a>
                 <Logout email={auth.profile?.email ?? auth.user.email} />
               </div>
             </>
