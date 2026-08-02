@@ -1,6 +1,7 @@
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert");
+const { readFileSync } = require("node:fs");
 
 // ---- Espelha a rotacao round-robin de supabase/schema.sql (pick_link) ----
 // index = (counter - 1) % n  ; counter comeca em 1 e incrementa a cada humano.
@@ -58,4 +59,14 @@ test("humano real NAO e tratado como bot", () => {
     "Chrome/126.0 Mobile Safari/537.36";
   assert.ok(!isBot(chrome));
   assert.ok(!isBot(android));
+});
+
+test("health check do Painel e publico e nao consulta o Supabase", () => {
+  const proxy = readFileSync("proxy.ts", "utf8");
+  const health = readFileSync("app/api/health/route.ts", "utf8");
+
+  assert.match(proxy, /pathname === "\/api\/health"/);
+  assert.match(proxy, /return NextResponse\.next\(\)/);
+  assert.match(health, /export function HEAD/);
+  assert.match(health, /status: 204/);
 });

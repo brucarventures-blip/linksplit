@@ -1,7 +1,13 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 export async function proxy(request: NextRequest) {
+  // A central de acesso consulta esta rota para exibir disponibilidade.
+  // Ela precisa responder sem sessão e sem aguardar uma chamada ao Supabase.
+  if (request.nextUrl.pathname === "/api/health") {
+    return NextResponse.next();
+  }
+
   return updateSession(request);
 }
 

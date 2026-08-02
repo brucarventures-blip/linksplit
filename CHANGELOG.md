@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5] - 2026-08-02
+
+### Performance
+
+- Adicionada uma rota pública e mínima de saúde para o Painel verificar a
+  disponibilidade do LinkSplit sem carregar login, dashboard ou Supabase.
+
 ## [1.0.4] - 2026-08-02
 
 ### Changed
