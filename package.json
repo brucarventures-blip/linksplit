@@ -1,6 +1,6 @@
 {
   "name": "linksplit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Rotador de links (traffic splitter) com distribuicao igual e filtro de bots.",
   "scripts": {

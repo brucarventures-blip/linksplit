@@ -2,12 +2,14 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { getCurrentUser } from "@/lib/auth";
 import Logout from "./Logout";
+import LinkSplitBrandIcon from "./BrandIcon";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "LinkSplit — Rotador de Links",
   description: "Distribua o trafego das suas campanhas igualmente entre varias paginas.",
+  icons: { icon: "/icon.svg" },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -17,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <header className="topbar">
           <a href={auth ? "/dashboard" : "/login"} className="brand">
-            <span className="brand-mark" aria-hidden="true">B</span>
+            <span className="brand-mark"><LinkSplitBrandIcon title="LinkSplit" /></span>
             <span className="brand-copy">
               <strong>LinkSplit</strong>
               <small>ROTEAMENTO</small>
