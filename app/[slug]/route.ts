@@ -17,10 +17,11 @@ const RESERVED = new Set([
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  if (RESERVED.has(params.slug)) {
+  const { slug } = await params;
+  if (RESERVED.has(slug)) {
     return new NextResponse("Not found", { status: 404 });
   }
-  return handleRedirect(req, params.slug);
+  return handleRedirect(req, slug);
 }

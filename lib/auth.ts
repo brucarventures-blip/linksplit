@@ -13,7 +13,7 @@ export type AuthContext = {
 // Retorna o usuário logado + perfil (papel) + projetos que ele pode acessar.
 // Null se não houver sessão.
 export async function getCurrentUser(): Promise<AuthContext | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

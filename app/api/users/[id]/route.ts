@@ -6,11 +6,15 @@ import { serviceClient, hasServiceKey } from "@/lib/supabaseService";
 export const runtime = "nodejs";
 
 // DELETE /api/users/<id> -> exclui o usuário. Só admin.
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const auth = await getCurrentUser();
   if (!auth) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
   if (!auth.isAdmin) return NextResponse.json({ error: "acesso apenas para admin" }, { status: 403 });
-  if (auth.user.id === params.id)
+  if (auth.user.id === id)
     return NextResponse.json({ error: "Você não pode excluir a si mesmo." }, { status: 400 });
   if (!hasServiceKey)
     return NextResponse.json(
@@ -18,17 +22,21 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
       { status: 400 }
     );
 
-  const { error } = await serviceClient().auth.admin.deleteUser(params.id);
+  const { error } = await serviceClient().auth.admin.deleteUser(id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }
 
 // PATCH /api/users/<id> -> atualiza os projetos liberados. Só admin.
 // body: { project_ids: string[] }
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const auth = await getCurrentUser();
   if (!auth) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
-  const isSelf = auth.user.id === params.id;
+  const isSelf = auth.user.id === id;
   if (!auth.isAdmin && !isSelf)
     return NextResponse.json({ error: "acesso apenas para admin" }, { status: 403 });
 
@@ -48,14 +56,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     if (buf.length > 2_500_000)
       return NextResponse.json({ error: "Imagem muito grande (máx ~2MB)." }, { status: 400 });
     const svc = serviceClient();
-    const path = `${params.id}.${ext}`;
+    const path = `${id}.${ext}`;
     const up = await svc.storage
       .from("avatars")
       .upload(path, buf, { contentType: m[1], upsert: true });
     if (up.error) return NextResponse.json({ error: up.error.message }, { status: 500 });
     const { data: pub } = svc.storage.from("avatars").getPublicUrl(path);
     const url = `${pub.publicUrl}?v=${Date.now()}`;
-    await supabaseAdmin.from("profiles").update({ avatar_url: url }).eq("id", params.id);
+    await supabaseAdmin.from("profiles").update({ avatar_url: url }).eq("id", id);
     return NextResponse.json({ ok: true, avatar_url: url });
   }
 
@@ -63,11 +71,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!auth.isAdmin) return NextResponse.json({ error: "acesso apenas para admin" }, { status: 403 });
   const projectIds: string[] = Array.isArray(body?.project_ids) ? body.project_ids : [];
 
-  await supabaseAdmin.from("user_projects").delete().eq("user_id", params.id);
+  await supabaseAdmin.from("user_projects").delete().eq("user_id", id);
   if (projectIds.length > 0) {
     await supabaseAdmin
       .from("user_projects")
-      .insert(projectIds.map((pid) => ({ user_id: params.id, project_id: pid })));
+      .insert(projectIds.map((pid) => ({ user_id: id, project_id: pid })));
   }
   return NextResponse.json({ ok: true });
 }

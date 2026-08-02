@@ -14,14 +14,15 @@ async function countClicks(campaignId: string, opts: { linkId?: string; bot?: bo
   return data?.length ?? 0;
 }
 
-export default async function CampaignStats({ params }: { params: { id: string } }) {
+export default async function CampaignStats({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const auth = await getCurrentUser();
   if (!auth) redirect("/login");
 
   const { data: campaign } = await supabaseAdmin
     .from("campaigns")
     .select("id, slug, name, filter_bots, facebook_pixel_id, active, project_id")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (!campaign) return notFound();

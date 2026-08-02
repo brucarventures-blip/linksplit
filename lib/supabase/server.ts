@@ -4,9 +4,9 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY, cookieOptionsFor } from "./config";
 
 // Cliente Supabase para Server Components / Route Handlers, com a sessão do
 // usuário lida dos cookies. Usa a chave ANON (respeita o usuário logado).
-export function createClient() {
-  const cookieStore = cookies();
-  const host = headers().get("host") ?? undefined;
+export async function createClient() {
+  const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
+  const host = headerStore.get("host") ?? undefined;
   return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     cookieOptions: cookieOptionsFor(host),
     cookies: {

@@ -6,12 +6,13 @@ export const runtime = "nodejs";
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const auth = await getCurrentUser();
   if (!auth) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
   if (!auth.isAdmin) return NextResponse.json({ error: "apenas admin exclui projetos" }, { status: 403 });
-  const { error } = await supabaseAdmin.from("projects").delete().eq("id", params.id);
+  const { error } = await supabaseAdmin.from("projects").delete().eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }

@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.4] - 2026-08-02
+
+### Changed
+
+- Atualizado o núcleo para Next.js 16 e React 19, com migração das APIs
+  assíncronas de sessão e rotas dinâmicas.
+- Substituído o middleware legado pelo proxy nativo do Next.js 16.
+- Fixadas versões corrigidas de PostCSS e Sharp para eliminar os alertas do
+  relatório de dependências.
+
+## [1.0.3] - 2026-08-01
+
+### Changed
+
+- Adotada a assinatura visual premium e a nova família de ícones do Brucar OS.
+
 ## [1.0.2] - 2026-07-31
 
 ### Changed
