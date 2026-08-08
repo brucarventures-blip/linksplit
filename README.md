@@ -3,6 +3,14 @@
 Distribui o tráfego das suas campanhas (Facebook Ads etc.) **igualmente** entre
 várias páginas de destino, com **filtro de bots** para manter a divisão exata.
 
+Versão atual: **v1.0.6**.
+
+## Release v1.0.6
+
+- Nova identidade Brucar Material Shell, com navegação e formulários responsivos.
+- Versão, favicon, ícone Apple e retorno ao Painel padronizados.
+- Nenhuma alteração no round-robin, filtro de bots, UTM, pixels ou permissões.
+
 - 4 links → 25% cada · 5 links → 20% cada (rotação **round-robin exata**, não é aleatório).
 - Filtro de bots: o robô do Facebook (`facebookexternalhit`) e outros crawlers
   **não gastam rotação** — só humanos reais entram na divisão. Isso mantém os
@@ -22,7 +30,7 @@ várias páginas de destino, com **filtro de bots** para manter a divisão exata
 
 ## Stack
 
-- **Next.js 14** (App Router) — dashboard + API + motor de redirect.
+- **Next.js 16** (App Router) — dashboard + API + motor de redirect.
 - **Supabase (Postgres)** — campanhas, links, cliques; rotação atômica via função `pick_link`.
 - Deploy recomendado: **Vercel**.
 

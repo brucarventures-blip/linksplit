@@ -70,3 +70,23 @@ test("health check do Painel e publico e nao consulta o Supabase", () => {
   assert.match(health, /export function HEAD/);
   assert.match(health, /status: 204/);
 });
+
+test("Brucar Material Shell preserva identidade, versao e retorno ao Painel", () => {
+  const css = readFileSync("app/globals.css", "utf8");
+  const layout = readFileSync("app/layout.tsx", "utf8");
+  const icon = readFileSync("app/icon.svg", "utf8");
+  const version = readFileSync("lib/version.ts", "utf8");
+
+  assert.match(css, /--bg: #15120f/);
+  assert.match(css, /--accent: #c4512f/);
+  assert.match(css, /--signal: #d2ad5c/);
+  assert.match(css, /"Avenir Next"/);
+  assert.doesNotMatch(css, /--accent: #2f80ff/);
+  assert.match(layout, /themeColor: "#15120f"/);
+  assert.match(layout, /https:\/\/painel\.brucarventures\.com/);
+  assert.match(layout, /favicon\.ico/);
+  assert.match(layout, /apple-icon\.png/);
+  assert.match(version, /VERSION = "1\.0\.6"/);
+  assert.match(icon, /stroke="#c4512f"/);
+  assert.match(icon, /fill="#d2ad5c"/);
+});

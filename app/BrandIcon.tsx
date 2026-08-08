@@ -5,7 +5,7 @@ type BrandIconProps = SVGProps<SVGSVGElement> & {
   title?: string;
 };
 
-export default function LinkSplitBrandIcon({ accent = "#35d4ff", title, ...props }: BrandIconProps) {
+export default function LinkSplitBrandIcon({ accent = "#d2ad5c", title, ...props }: BrandIconProps) {
   const accessibility = title
     ? { role: "img" as const, "aria-label": title }
     : { "aria-hidden": true as const };

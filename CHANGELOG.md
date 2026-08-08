@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.6] - 2026-08-08
+
+### Changed
+
+- Aplicado o Brucar Material Shell com carvão, osso, óxido, latão, pátina e ameixa.
+- Padronizados tipografia Avenir, superfícies, botões, campos, tabelas e estados de foco.
+- Refinados cabeçalho fixo e responsividade de navegação, formulários, estatísticas e tabelas.
+
+### Added
+
+- Versão visível no cabeçalho, favicon e ícone Apple dedicados ao LinkSplit.
+- Contrato automatizado para proteger identidade, versão, saúde pública e retorno ao Painel.
+
 ## [1.0.5] - 2026-08-02
 
 ### Performance
