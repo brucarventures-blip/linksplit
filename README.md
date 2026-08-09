@@ -3,7 +3,7 @@
 Distribui o tráfego das suas campanhas (Facebook Ads etc.) **igualmente** entre
 várias páginas de destino, com **filtro de bots** para manter a divisão exata.
 
-Versão atual: **v1.0.7**.
+Versão atual: **v1.0.8**.
 
 ## Release v1.0.6
 

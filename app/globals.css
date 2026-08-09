@@ -87,6 +87,17 @@ a { color: var(--accent-hover); text-decoration: none; }
 .nav a:hover { color: var(--text); background: rgba(196, 81, 47, .13); }
 
 .topbar-actions { display: flex; align-items: center; gap: 9px; margin-left: auto; }
+.user-session { align-items: center; flex-wrap: nowrap; }
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(210, 173, 92, .72);
+  box-shadow: 0 0 0 2px rgba(21, 18, 15, .9), 0 5px 18px rgba(0, 0, 0, .34);
+}
+.user-avatar-fallback { display: inline-grid; place-items: center; color: var(--text); background: var(--bg); font-weight: 800; }
 
 .panel-link {
   color: var(--text);
@@ -225,6 +236,7 @@ tbody tr:hover { background: rgba(196, 81, 47, .07); }
   .nav a { white-space: nowrap; }
   .topbar-actions { margin-left: auto; gap: 6px; }
   .topbar-actions .muted { display: none; }
+  .user-avatar { width: 34px; height: 34px; }
   .panel-link { padding-inline: 10px; }
   .container { padding: 28px 14px 72px; }
   .card, .campaign-form { padding: 17px; border-radius: 7px; }

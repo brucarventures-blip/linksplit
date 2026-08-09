@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <a className="panel-link" href="https://painel.brucarventures.com" aria-label="Voltar ao Painel Brucar">
                   ← Painel
                 </a>
-                <Logout email={auth.profile?.email ?? auth.user.email} />
+                <Logout email={auth.profile?.email ?? auth.user.email} avatarUrl={auth.profile?.avatar_url} />
               </div>
             </>
           )}

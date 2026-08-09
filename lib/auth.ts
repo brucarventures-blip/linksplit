@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabaseServer";
 
-export type Profile = { id: string; email: string | null; role: "admin" | "operador" };
+export type Profile = { id: string; email: string | null; role: "admin" | "operador"; avatar_url: string | null };
 
 export type AuthContext = {
   user: { id: string; email?: string };
@@ -21,7 +21,7 @@ export async function getCurrentUser(): Promise<AuthContext | null> {
 
   const { data: profile } = await supabaseAdmin
     .from("profiles")
-    .select("id, email, role")
+    .select("id, email, role, avatar_url")
     .eq("id", user.id)
     .single();
 

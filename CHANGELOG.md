@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.8] - 2026-08-09
+
+### Identidade pessoal
+
+- Mostra a foto cadastrada do usuário no cabeçalho e usa a foto local de Bruno como fallback seguro para a conta administrativa.
+- Mantém iniciais neutras para membros sem foto, evitando exibir a identidade de Bruno para outra pessoa.
+
 ## [1.0.7] - 2026-08-08
 
 ### Identidade Brucar
