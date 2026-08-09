@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.7] - 2026-08-08
+
+### Identidade Brucar
+
+- Unifica o monograma do cabeçalho, favicon e ícone Apple com a marca canônica Brucar.
+- Mantém a pátina como assinatura funcional de roteamento do produto.
+
 ## [1.0.6] - 2026-08-08
 
 ### Changed

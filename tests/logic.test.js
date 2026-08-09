@@ -86,7 +86,7 @@ test("Brucar Material Shell preserva identidade, versao e retorno ao Painel", ()
   assert.match(layout, /https:\/\/painel\.brucarventures\.com/);
   assert.match(layout, /favicon\.ico/);
   assert.match(layout, /apple-icon\.png/);
-  assert.match(version, /VERSION = "1\.0\.6"/);
+  assert.match(version, /VERSION = "1\.0\.7"/);
   assert.match(icon, /stroke="#c4512f"/);
   assert.match(icon, /fill="#d2ad5c"/);
 });
