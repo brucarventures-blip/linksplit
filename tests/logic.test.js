@@ -86,7 +86,7 @@ test("Brucar Material Shell preserva identidade, versao e retorno ao Painel", ()
   assert.match(layout, /https:\/\/painel\.brucarventures\.com/);
   assert.match(layout, /favicon\.ico/);
   assert.match(layout, /apple-icon\.png/);
-  assert.match(version, /VERSION = "1\.0\.8"/);
+  assert.match(version, /VERSION = "1\.0\.9"/);
   assert.match(layout, /avatarUrl=\{auth\.profile\?\.avatar_url\}/);
   assert.match(readFileSync("app/Logout.tsx", "utf8"), /bruno-avatar\.jpg/);
   assert.ok(readFileSync("public/bruno-avatar.jpg").byteLength > 0);

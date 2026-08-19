@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.9] - 2026-08-19
+
+### Desempenho
+
+- Adiciona `/api/warmup` autenticado para preparar sessão, banco e a primeira consulta de campanhas antes da navegação.
+- Respeita os projetos permitidos do operador e não registra clique, não redireciona tráfego e não altera campanha.
+
 ## [1.0.8] - 2026-08-09
 
 ### Identidade pessoal
